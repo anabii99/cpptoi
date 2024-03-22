@@ -6,9 +6,12 @@ using namespace std;
 
 struct ListNode {
     int val;
-    ListNode* next;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
     ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
+
 
 std::unique_ptr<ListNode> to_list(std::vector<int>& vec) {
     ListNode* current = nullptr;
@@ -22,39 +25,30 @@ std::unique_ptr<ListNode> to_list(std::vector<int>& vec) {
 
 class Solution {
 public:
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        stack<int> s1, s2;
-        while (l1) {
-            s1.push(l1->val);
-            l1 = l1->next;
-        }
-        while (l2) {
-            s2.push(l2->val);
-            l2 = l2->next;
-        }
-        
-        ListNode dummy(0);
-        ListNode* next = nullptr;
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {    
+        ListNode* node = new ListNode();
+        ListNode* tmp = node;
         int carry = 0;
-        
-        while (!s1.empty() || !s2.empty() || carry) {
-            next = dummy.next;
+    
+        while (l1 || l2 || carry) {
+            int n1 = l1 ? l1->val : 0;
+            int n2 = l2 ? l2->val : 0;
+            int n = (n1 + n2) + carry;
+            int digit = n % 10;
             
-            if (!s1.empty()) {
-                carry += s1.top();
-                s1.pop();
-            }
-            if (!s2.empty()) {
-                carry += s2.top();
-                s2.pop();
-            }
+            tmp->val = digit;
+            carry = n / 10;
             
-            dummy.next = new ListNode(carry % 10);
-            carry /= 10;
-            dummy.next->next = next;
+            l1 = l1 ? l1->next : nullptr;
+            l2 = l2 ? l2->next : nullptr;
+            
+            if (l1 || l2 || carry) {
+                tmp->next = new ListNode();
+                tmp = tmp->next;
+            }
         }
         
-        return dummy.next;
+        return node;
     }
 };
 
