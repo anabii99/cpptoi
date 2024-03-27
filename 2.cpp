@@ -26,7 +26,7 @@ public:
 };
 
 class Solution {
-  public:
+public:
     ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
         ListNode *node = new ListNode();
         ListNode *tmp = node;
